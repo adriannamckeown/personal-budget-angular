@@ -8,16 +8,32 @@ const budget = {
         myBudget: [
         {
             title: 'Eat out',
-            budget: 25
+            budget: 45
         },
         {
             title: 'Rent',
-            budget: 375
+            budget: 320
         },
         {
             title: 'Grocery',
-            budget: 110
+            budget: 150
         },
+        {
+            title: 'Clothes',
+            budget: 100
+        },
+        {
+            title: 'Entertainment',
+            budget: 45
+        },
+        {
+            title: 'Transportation',
+            budget: 75
+        },
+        {
+            title: 'Utilities',
+            budget: 150
+        }
     ]
 };
 
