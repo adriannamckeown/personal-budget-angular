@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
+import { DataService } from 'src/shared/data.service';
 
 @Component({
   selector: 'pb-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']
 })
-export class HomepageComponent implements OnInit {
+export class HomepageComponent {
 
-    public dataSource = {
-      datasets: [
-        {
-        data: [],
-        backgroundColor: [
+  myBudget: any;
+
+  constructor(private dataService: DataService) { }
+  public dataSource = {
+    datasets: [
+    {
+      data: [],
+      backgroundColor: [
           '#fffb87',
           '#ffa1e1',
           '#a3fff7',
@@ -27,27 +31,37 @@ export class HomepageComponent implements OnInit {
       labels: []
   };
 
-    constructor(private http: HttpClient) { }
+    // constructor(private http: HttpClient) { }
+    getBudget(): void {
+      this.dataService.getBudget().subscribe(budget => {
+      this.myBudget = budget;
+      });
+    }
 
-    ngOnInit(): void {
-      this.http.get('http://localhost:3000/budget')
-      .subscribe((res: any) => {
-        for (var i = 0; i < res.myBudget.length; i++) {
-          this.dataSource.datasets[0].data[i] = res.myBudget[i].budget;
-          this.dataSource.labels[i] = res.myBudget[i].title;
-          this.createChart();
-          // this.createD3();
-      }
-    });
+    ngOnInit() {
+      this.getBudget();
+      for (var i = 0; i < this.myBudget.length; i++) {
+        this.dataSource.datasets[0].data[i] = this.myBudget[i].budget;
+        this.dataSource.labels[i] = this.myBudget[i].title;
+        this.createChart();
+        this.createD3Chart();
+    }
   }
 
 createChart() {
-  // const ctx = document.getElementById('myChart').getContext('2d');
   const ctx = document.getElementById('myChart');
   const myPieChart = new Chart(ctx, {
       type: 'pie',
       data: this.dataSource
   });
+}
+
+createD3Chart() {
+  const ctx = document.getElementById('donutChart');
+  const myDoughnutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: this.dataSource
+});
 }
 
 }
